@@ -23,6 +23,7 @@ public:
     unsigned int step_size;
 
     SharedMemory* local;
+    int shared_memory_version;
     ~Store();
 };
 

@@ -1,6 +1,6 @@
 #include "Store.h"
 
-Store::Store() : local(new SharedMemory) {
+Store::Store() : local(new SharedMemory), shared_memory_version(SHARED_MEMORY_VERSION) {
     map_file();
 }
 
@@ -11,13 +11,11 @@ void Store::map_file() {
 
 void Store::update() {
     if (data->mSequenceNumber%2) {
-        continue;
+        step_size = data->mSequenceNumber - steps;
+        steps = data->mSequenceNumber;
+
+        memcpy(local, data, sizeof(SharedMemory));
     }
-
-    step_size = data->mSequenceNumber - steps;
-    steps = data->mSequenceNumber;
-
-    memcpy(local, data, sizeof(SharedMemory));
 }
 
 Store::~Store() {
