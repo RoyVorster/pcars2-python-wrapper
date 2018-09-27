@@ -3,4 +3,4 @@ project(Windows_Projects)
 
 set(CMAKE_CXX_STANDARD 11)
 
-add_executable(Windows_Projects main.cpp)
+add_executable(Windows_Projects Store.cpp Store.h)
