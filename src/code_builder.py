@@ -37,7 +37,7 @@ class Builder:
         )
 
         self.lib_name = lib_name
-        self.lib_path = os.path.join('module', self.lib_name) + '.cpp'
+        self.lib_path = os.path.join('modules', self.lib_name) + '.cpp'
 
         self.filter()
 

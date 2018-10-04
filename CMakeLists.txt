@@ -16,25 +16,25 @@ link_directories(${BOOST_LIBRARY_DIR})
 add_custom_command(
     COMMAND ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/src/generate_lib.py ${CMAKE_CURRENT_SOURCE_DIR}
     DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/src/generate_lib.py
-    OUTPUT ${CMAKE_CURRENT_SOURCE_DIR}/src/module/boost_lib.cpp
+    OUTPUT ${CMAKE_CURRENT_SOURCE_DIR}/src/modules/boost_lib.cpp
     COMMENT "Generating boost"
 )
 
-include(boost_lib_variables.cmake)
+include(variables.cmake)
 
 # Create library from store class
 add_library(store_lib SHARED src/data_store/data_store.cpp)
 
 # Create actual boost library
-add_library(boost_lib SHARED ${CMAKE_CURRENT_SOURCE_DIR}/src/module/boost_lib.cpp)
-target_link_libraries(boost_lib boost_python3)
+add_library(${BOOST_LIB_NAME} SHARED ${BOOST_LIB_SRC})
+target_link_libraries(${BOOST_LIB_NAME} boost_python3)
 
 # Prefix and output dir settings
-set_target_properties(boost_lib PROPERTIES PREFIX "")
+set_target_properties(${BOOST_LIB_NAME} PROPERTIES PREFIX "")
 set_target_properties(store_lib PROPERTIES PREFIX "")
 
-add_custom_command(TARGET boost_lib 
+add_custom_command(TARGET ${BOOST_LIB_NAME} 
     POST_BUILD 
     COMMAND ${CMAKE_COMMAND} -E copy
-    boost_lib.so ${CMAKE_CURRENT_LIST_DIR}/src/boost_lib.so
+    ${BOOST_LIB_NAME}.so ${CMAKE_CURRENT_LIST_DIR}/src/${BOOST_LIB_NAME}.so
 )
