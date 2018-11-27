@@ -2,27 +2,32 @@ import os
 from warnings import filterwarnings, catch_warnings
 
 with catch_warnings():
-    filterwarnings("ignore",category=DeprecationWarning)
+    filterwarnings('ignore', category=DeprecationWarning)
+
+    # Include local version of pygccxml
     from pygccxml import parser
+    from pygccxml import utils
 
 from pyplusplus import module_builder
 from pyplusplus.module_builder import call_policies
 
-generator_path = "/usr/bin/castxml"
-generator_name = "castxml"
-compiler = "gnu"
-compiler_path = "/usr/bin/g++"
 
-cpp_folder = 'data_store'
+generator_name, generator_path = 'castxml', 'castxml\\bin\\castxml.exe'
 
-exclude_vars = ["mCarNames", "mCarClassNames", "mOrientations", "mTyreCompound"]
+# Find compiler path using cmd 'where'
+from subprocess import Popen, PIPE
+compiler_name = 'g++'
+p = Popen(['where', compiler_name], stdout=PIPE, stderr=PIPE)
+compiler_path = p.stdout.read().decode('utf-8').rstrip()
+
+exclude_vars = ['mCarNames', 'mCarClassNames', 'mOrientations', 'mTyreCompound']
 
 class Builder:
-    def __init__(self, headers, lib_name):        
+    def __init__(self, headers, lib_name, cpp_folder='data_store', result_folder='modules'):        
         self.xml_generator_config = parser.xml_generator_configuration_t(
             xml_generator_path=generator_path,
             xml_generator=generator_name,
-            compiler=compiler,
+            compiler=compiler_name,
             compiler_path=compiler_path
         )
 
@@ -37,7 +42,7 @@ class Builder:
         )
 
         self.lib_name = lib_name
-        self.lib_path = os.path.join('modules', self.lib_name) + '.cpp'
+        self.lib_path = os.path.join(result_folder, self.lib_name) + '.cpp'
 
         self.filter()
 
@@ -52,4 +57,3 @@ class Builder:
         
         vars_to_exclude = self.m_builder.variables(lambda decl: decl.name in exclude_vars)
         vars_to_exclude.exclude()
-        

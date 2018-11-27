@@ -7,8 +7,10 @@ project (boost_test
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 # Includes
-find_package(PythonInterp 3.7 REQUIRED)
-find_package(PythonLibs 3.7 REQUIRED)
+# find_package(PythonInterp 3.7 REQUIRED)
+# find_package(PythonLibs 3.7 REQUIRED)
+
+set(PYTHON_EXECUTABLE C:\\Users\\RoyVorster\\AppData\\Local\\Programs\\Python\\Python37\\python.exe)
 
 include_directories(PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/src ${PYTHON_INCLUDE_DIRS} ${Boost_INCLUDE_DIR})
 link_directories(${BOOST_LIBRARY_DIR})
